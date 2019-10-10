@@ -138,6 +138,7 @@ void token::add_balance(const name &owner, const asset &value, const name &ram_p
    {
       to_acnts.emplace(ram_payer, [&](auto &a) {
          a.balance = value;
+         claim(owner);
       });
    }
    else
@@ -168,9 +169,14 @@ void token::open(const name &owner, const symbol &symbol, const name &ram_payer)
          a.balance = asset{0, symbol};
       });
 
-      asset claim_quantity = asset{100000000, symbol};
-      issue(owner, claim_quantity, "Claimed 10,000 BOMB. You have 24 hours to transfer all of it, all it will detonate!");
+      claim(owner);
    }
+}
+
+void token::claim(const name &owner)
+{
+   asset claim_quantity = asset{100000000, symbol};
+   issue(owner, claim_quantity, "Claimed 10,000 BOMB. You have 24 hours to transfer all of it, all it will detonate!");
 }
 
 void token::close(const name &owner, const symbol &symbol)
